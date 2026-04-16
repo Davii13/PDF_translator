@@ -158,7 +158,7 @@ O projeto suporta 26 idiomas com detecção automática:
 
 ## 👤 Autor
 
-**Desenvolvido por: Davi Silva**
+**Desenvolvido por: Davi Nunes Carvalho**
 
 - Desenvolvedor Python especializado em automação e processamento de texto
 - Foco em soluções práticas para tradução e processamento de documentos
@@ -166,7 +166,7 @@ O projeto suporta 26 idiomas com detecção automática:
 ## 🙏 Créditos e Agradecimentos
 
 ### Orientação Acadêmica
-**Professor Orientador:** [Nome do Professor]
+**Professor Orientador:** [João Paulo Carneiro Aramuni]
 
 Agradecimento especial ao professor pela orientação, suporte técnico e compartilhamento de conhecimento que foram fundamentais para o desenvolvimento deste projeto.
 
@@ -195,7 +195,7 @@ Este projeto está disponível sob licença MIT. Sinta-se à vontade para contri
 
 Para dúvidas, sugestões ou report de bugs:
 - Abra uma issue no repositório
-- Entre em contato através do email: [seu-email@exemplo.com]
+- Entre em contato através do email: [davinunescarvalho35@gmail.com]
 
 ---
 
