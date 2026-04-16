@@ -5,6 +5,46 @@ from deep_translator import GoogleTranslator
 
 
 # ─────────────────────────────────────────────
+# IDIOMAS SUPORTADOS
+# ─────────────────────────────────────────────
+
+# Mapeamento: "Nome exibido" → "código ISO 639-1"
+LANGUAGES: dict[str, str] = {
+    "Detectar automaticamente": "auto",
+    "Afrikaans":   "af",
+    "Alemão":      "de",
+    "Árabe":       "ar",
+    "Chinês (simplificado)": "zh-CN",
+    "Chinês (tradicional)": "zh-TW",
+    "Coreano":     "ko",
+    "Dinamarquês": "da",
+    "Espanhol":    "es",
+    "Finlandês":   "fi",
+    "Francês":     "fr",
+    "Grego":       "el",
+    "Hindi":       "hi",
+    "Holandês":    "nl",
+    "Húngaro":     "hu",
+    "Indonésio":   "id",
+    "Inglês":      "en",
+    "Italiano":    "it",
+    "Japonês":     "ja",
+    "Norueguês":   "no",
+    "Persa":       "fa",
+    "Polonês":     "pl",
+    "Português":   "pt",
+    "Romeno":      "ro",
+    "Russo":       "ru",
+    "Sueco":       "sv",
+    "Tailandês":   "th",
+    "Tcheco":      "cs",
+    "Turco":       "tr",
+    "Ucraniano":   "uk",
+    "Vietnamita":  "vi",
+}
+
+
+# ─────────────────────────────────────────────
 # 1. EXTRAÇÃO
 # ─────────────────────────────────────────────
 
@@ -128,7 +168,7 @@ def dividir_em_blocos(texto: str, max_chars: int = 4500) -> list[str]:
 
 def traduzir_blocos(
     blocos: list[str],
-    origem: str = "en",
+    origem: str = "auto",
     destino: str = "pt",
     pausa: float = 1.0,
     tentativas: int = 3,
@@ -137,10 +177,15 @@ def traduzir_blocos(
     Traduz cada bloco com:
       - pausa entre chamadas (evita bloqueio da API gratuita)
       - retry automático em caso de falha temporária
+      - origem: código ISO 639-1 ou "auto" para detecção automática
+      - destino: código ISO 639-1 do idioma de saída
     """
     tradutor = GoogleTranslator(source=origem, target=destino)
     traducoes: list[str] = []
     total = len(blocos)
+
+    lang_info = f"{origem} → {destino}"
+    print(f"  🌐 Tradução: {lang_info}")
 
     for i, bloco in enumerate(blocos, start=1):
         print(f"  Traduzindo bloco {i}/{total} ({len(bloco)} chars)...")
@@ -188,14 +233,27 @@ def salvar_resultado(
 # 6. MAIN
 # ─────────────────────────────────────────────
 
-def main():
-    caminho_pdf = "artigo.pdf"
-    caminho_saida = "artigo_traduzido.txt"
+def main(
+    caminho_pdf: str = "artigo.pdf",
+    caminho_saida: str = "artigo_traduzido.txt",
+    origem: str = "auto",
+    destino: str = "pt",
+) -> None:
+    """
+    Pipeline completo de tradução.
 
+    Parâmetros
+    ----------
+    caminho_pdf   : caminho do arquivo PDF de entrada
+    caminho_saida : caminho do arquivo .txt de saída
+    origem        : código do idioma de origem ("auto" = detecção automática)
+    destino       : código do idioma de destino
+    """
     # ── Extração ──────────────────────────────
     print("📄 Lendo PDF...")
     paginas = ler_pdf(caminho_pdf)
     print(f"   {len(paginas)} página(s) encontrada(s).")
+    print(f"   Idioma: {origem} → {destino}")
 
     # ── Tradução página a página ──────────────
     resultado: list[dict] = []
@@ -213,7 +271,7 @@ def main():
         blocos = dividir_em_blocos(texto_limpo)
         print(f"   {len(blocos)} bloco(s) para traduzir.")
 
-        traducoes = traduzir_blocos(blocos)
+        traducoes = traduzir_blocos(blocos, origem=origem, destino=destino)
         texto_traduzido = "\n\n".join(traducoes)
 
         resultado.append({**pg, "texto_traduzido": texto_traduzido})
